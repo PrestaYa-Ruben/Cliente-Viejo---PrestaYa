@@ -1,1 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Crédito</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#002D62">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
 
+  body {
+    background: #ffffff;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+    margin: 0;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 560px;
+    background: #ffffff;
+    border: 2px solid #002D62;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 45, 98, 0.25);
+  }
+
+  .header-marca {
+    background: #002D62;
+    padding: 22px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .header-logo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-logo .logo-texto {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .header-logo .logo-texto .presta {
+    color: #ffffff;
+  }
+
+  .header-logo .logo-texto .ya {
+    color: #4CAF7D;
+  }
+
+  .header-logo .logo-tagline {
+    font-size: 10px;
+    color: #ffffff;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
+  .header-simulador {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .header-simulador svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .header-simulador span {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #ffffff;
+    white-space: nowrap;
+  }
+
+  .frecuencia-titulo {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 16px;
+    color: #ffffff;
+    background: #002D62;
+    margin: 0;
+    padding: 0 16px 18px;
+  }
+
+  .paso-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #002D62;
+    background: #eaf2f8;
+    border-radius: 20px;
+    padding: 4px 10px;
+    margin: 0 22px 8px;
+  }
+
+  .form {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .fila-doble {
+    display: flex;
+    gap: 16px;
+  }
+
+  .fila-doble > div {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 420px) {
+    .fila-doble {
+      flex-direction: column;
+    }
+  }
+
+  label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+    color: #002D62;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  label svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    border: 2px solid #008F53;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #1f1f1f;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #002D62;
+  }
+
+  input[readonly] {
+    background: #eaf2f8;
+    color: #002D62;
+    font-weight: bold;
+    cursor: not-allowed;
+  }
+
+  .seccion-titulo {
+    margin: 0 22px 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #002D62;
+  }
+
+  .seccion-subtitulo {
+    margin: -6px 22px 10px;
+    font-size: 11px;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #002D62;
+  }
+
+  .tabla-wrap {
+    margin: 0 22px 22px;
+    border: 2px solid #008F53;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    background: #008F53;
+    color: #ffffff;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  tbody td {
+    padding: 9px 8px;
+    text-align: center;
+    font-size: 13px;
+    color: #1f1f1f;
+    border-top: 1px solid #99c2e8;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #eaf2f8;
+  }
+
+  tbody tr.fila-seleccionable {
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  tbody tr.fila-seleccionable:hover {
+    background: #d9ecf3;
+  }
+
+  tbody tr.fila-seleccionada {
+    background: #008F53 !important;
+  }
+
+  tbody tr.fila-seleccionada td {
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  tbody tr.fila-seleccionada .valor-cuota {
+    color: #ffffff;
+  }
+
+  .valor-cuota {
+    font-weight: bold;
+    color: #008F53;
+  }
+
+  .resumen-credito-glow {
+    position: relative;
+    z-index: 0;
+    margin: 0 22px 22px;
+    border-radius: 12px;
+    padding: 4px;
+    overflow: hidden;
+    transition: filter 0.35s ease;
+  }
+
+  .resumen-credito-glow::before {
+    content: '';
+    position: absolute;
+    inset: -400px;
+    z-index: -1;
+    background: conic-gradient(from 0deg, transparent 0%, transparent 52%, #d4ffe7 62%, #00ff85 73%, #00c853 81%, #00ff85 89%, #d4ffe7 96%, transparent 100%);
+    animation: brilloResumenPrestamo 2.6s linear infinite;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .resumen-credito-glow.brillo-activo::before {
+    opacity: 1;
+  }
+
+  .resumen-credito-glow.brillo-activo {
+    filter: drop-shadow(0 0 9px rgba(0, 200, 83, 0.6)) drop-shadow(0 0 3px rgba(0, 255, 133, 0.85));
+  }
+
+  @keyframes brilloResumenPrestamo {
+    to { transform: rotate(360deg); }
+  }
+
+  .resumen-credito {
+    position: relative;
+    background: #ffffff;
+    border: 1.5px solid #99c2e8;
+    border-radius: 8px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .resumen-credito-titulo {
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #002D62;
+    text-align: center;
+  }
+
+  .resumen-credito-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #1f1f1f;
+    gap: 12px;
+  }
+
+  .resumen-credito-fila span:first-child {
+    font-weight: 600;
+    color: #002D62;
+  }
+
+  .resumen-credito-fila span:last-child {
+    font-weight: bold;
+    color: #008F53;
+    text-align: right;
+  }
+
+  .resumen-credito-fila.pendiente span:last-child {
+    color: #7a8a99;
+    font-weight: normal;
+  }
+
+  .btn-enviar-wrap {
+    margin: 0 22px 22px;
+  }
+
+  .btn-enviar {
+    width: 100%;
+    padding: 14px;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+    background: #008F53;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-enviar:hover {
+    background: #007645;
+  }
+
+  .footer-simulador {
+    background: #f0f0f0;
+    color: #555555;
+    font-size: 12px;
+    text-align: center;
+    padding: 16px 22px;
+    border-top: 1px solid #dcdcdc;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="header-marca">
+      <div class="header-logo">
+        <div class="logo-texto"><span class="presta">Presta</span><span class="ya">Ya</span></div>
+        <div class="logo-tagline">Préstamos de bajo monto</div>
+      </div>
+      <div class="header-simulador">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="2" width="16" height="20" rx="2" stroke="#ffffff" stroke-width="1.6"/>
+          <line x1="7" y1="6" x2="17" y2="6" stroke="#ffffff" stroke-width="1.6"/>
+          <circle cx="7.5" cy="11" r="1" fill="#ffffff"/>
+          <circle cx="12" cy="11" r="1" fill="#ffffff"/>
+          <circle cx="16.5" cy="11" r="1" fill="#ffffff"/>
+          <circle cx="7.5" cy="15" r="1" fill="#ffffff"/>
+          <circle cx="12" cy="15" r="1" fill="#ffffff"/>
+          <circle cx="16.5" cy="15" r="1" fill="#ffffff"/>
+          <circle cx="7.5" cy="19" r="1" fill="#ffffff"/>
+          <circle cx="12" cy="19" r="1" fill="#ffffff"/>
+        </svg>
+        <span>Solicitud de préstamo</span>
+      </div>
+    </div>
+    <div class="frecuencia-titulo" id="frecuenciaTitulo">QUINCENAL</div>
+
+    <div class="paso-badge">Paso 1 de 2</div>
+    <div class="form">
+      <div>
+        <label for="monto"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#002D62" stroke-width="1.8"/><path d="M12 7v10M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2c0 1.2-1.1 1.6-2.5 2s-2.5.8-2.5 2c0 1.2 1.1 2 2.5 2s2.5-.8 2.5-2" stroke="#002D62" stroke-width="1.6" stroke-linecap="round"/></svg>¿Cuánto necesitas?</label>
+        <input type="text" id="monto" inputmode="numeric" value="0">
+        <div id="avisoMonto" style="display:none; color:#002D62; font-size:12px; margin-top:6px;">El valor máximo permitido es $1.000.000</div>
+      </div>
+      <div>
+        <label for="metodoPago"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4.5" width="18" height="16" rx="2" stroke="#002D62" stroke-width="1.8"/><line x1="3" y1="9" x2="21" y2="9" stroke="#002D62" stroke-width="1.8"/><line x1="7.5" y1="2.5" x2="7.5" y2="6.5" stroke="#002D62" stroke-width="1.8" stroke-linecap="round"/><line x1="16.5" y1="2.5" x2="16.5" y2="6.5" stroke="#002D62" stroke-width="1.8" stroke-linecap="round"/></svg>Frecuencia de pago</label>
+        <select id="metodoPago">
+          <option value="semanal">Semanal</option>
+          <option value="quincenal" selected>Quincenal</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="paso-badge">Paso 2 de 2</div>
+    <div class="seccion-titulo">Opciones de pago</div>
+    <div class="seccion-subtitulo">Toca la fila con la cantidad de cuotas que mejor se adapte a tu capacidad de pago.</div>
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>N° de cuotas</th>
+            <th></th>
+            <th>Valor por cuota</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTablaCuotas"></tbody>
+      </table>
+    </div>
+
+    <div class="resumen-credito-glow" id="resumenCreditoGlow">
+      <div class="resumen-credito" id="resumenCredito">
+        <div class="resumen-credito-titulo">Resumen del préstamo</div>
+        <div class="resumen-credito-fila">
+          <span>Monto solicitado</span>
+          <span id="resumenMonto">$0</span>
+        </div>
+        <div class="resumen-credito-fila pendiente" id="filaResumenCuota">
+          <span>Cuota</span>
+          <span id="resumenCuota">Selecciona una opción de pago</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-enviar-wrap">
+      <button type="button" id="btnEnviarSolicitud" class="btn-enviar">ENVIAR SOLICITUD</button>
+    </div>
+
+    <div class="footer-simulador">PrestaYa</div>
+  </div>
+
+  <script>
+    const montoInput = document.getElementById('monto');
+    const metodoPagoSelect = document.getElementById('metodoPago');
+    const frecuenciaTitulo = document.getElementById('frecuenciaTitulo');
+    const cuerpoTablaCuotas = document.getElementById('cuerpoTablaCuotas');
+    const avisoMonto = document.getElementById('avisoMonto');
+
+    const RECARGOS_QUINCENAL = {1:0.10, 2:0.10, 3:0.20, 4:0.20, 5:0.30, 6:0.30, 7:0.40, 8:0.40, 9:0.50, 10:0.50};
+    const RECARGOS_SEMANAL   = {1:0.10, 2:0.10, 3:0.10, 4:0.10, 5:0.20, 6:0.20, 7:0.20, 8:0.20, 9:0.30, 10:0.30};
+    const MONTO_MAXIMO = 1000000;
+
+    let cuotasSeleccionadas = null;
+
+    function recargoPorCuotas(n, frecuencia) {
+      const tabla = frecuencia === 'semanal' ? RECARGOS_SEMANAL : RECARGOS_QUINCENAL;
+      return tabla[n] !== undefined ? tabla[n] : tabla[10];
+    }
+
+    function valorCuotaPara(monto, n, frecuencia) {
+      const recargo = recargoPorCuotas(n, frecuencia);
+      const totalConRecargo = monto * (1 + recargo);
+      const cuotaBruta = totalConRecargo / n;
+      return Math.ceil(cuotaBruta / 1000) * 1000;
+    }
+
+    function formatoPesos(n) {
+      return '$' + Math.round(n).toLocaleString('es-CO');
+    }
+
+    function limpiarNumero(str) {
+      return parseFloat(str.replace(/[^\d]/g, '')) || 0;
+    }
+
+    function actualizarTablaCuotas(monto, frecuencia) {
+      cuerpoTablaCuotas.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const valor = valorCuotaPara(monto, i, frecuencia);
+        const texto = i === 1 ? 'Cuota de' : 'Cuotas de';
+        const fila = document.createElement('tr');
+        fila.className = 'fila-seleccionable';
+        fila.dataset.n = i;
+        if (cuotasSeleccionadas === i) {
+          fila.classList.add('fila-seleccionada');
+        }
+        fila.innerHTML = '<td>' + i + '</td><td>' + texto + '</td><td class="valor-cuota">' + formatoPesos(valor) + '</td>';
+        fila.addEventListener('click', function() {
+          cuotasSeleccionadas = i;
+          actualizarTablaCuotas(monto, frecuencia);
+          actualizarResumenCredito(monto, frecuencia);
+        });
+        cuerpoTablaCuotas.appendChild(fila);
+      }
+    }
+
+    function actualizarResumenCredito(monto, frecuencia) {
+      document.getElementById('resumenMonto').textContent = formatoPesos(monto);
+      const filaResumenCuota = document.getElementById('filaResumenCuota');
+      const resumenCuotaEl = document.getElementById('resumenCuota');
+      const glowWrap = document.getElementById('resumenCreditoGlow');
+      if (!cuotasSeleccionadas) {
+        resumenCuotaEl.textContent = 'Selecciona una opción de pago';
+        filaResumenCuota.classList.add('pendiente');
+        glowWrap.classList.remove('brillo-activo');
+      } else {
+        const valor = valorCuotaPara(monto, cuotasSeleccionadas, frecuencia);
+        const frecuenciaTexto = frecuencia === 'semanal' ? 'Semanal' : 'Quincenal';
+        const texto = (cuotasSeleccionadas === 1 ? '1 cuota de ' : cuotasSeleccionadas + ' cuotas de ') + formatoPesos(valor) + ' (' + frecuenciaTexto + ')';
+        resumenCuotaEl.textContent = texto;
+        filaResumenCuota.classList.remove('pendiente');
+        glowWrap.classList.add('brillo-activo');
+      }
+    }
+
+    function calcular() {
+      let monto = limpiarNumero(montoInput.value);
+      const excede = monto > MONTO_MAXIMO;
+      avisoMonto.style.display = excede ? 'block' : 'none';
+      if (excede) {
+        monto = MONTO_MAXIMO;
+        montoInput.value = MONTO_MAXIMO.toLocaleString('es-CO');
+      }
+
+      const frecuencia = metodoPagoSelect.value;
+      frecuenciaTitulo.textContent = frecuencia.toUpperCase();
+      actualizarTablaCuotas(monto, frecuencia);
+      actualizarResumenCredito(monto, frecuencia);
+    }
+
+    montoInput.addEventListener('input', function(e) {
+      const num = limpiarNumero(e.target.value);
+      e.target.value = num ? num.toLocaleString('es-CO') : '';
+      calcular();
+    });
+    metodoPagoSelect.addEventListener('change', calcular);
+
+    document.getElementById('btnEnviarSolicitud').addEventListener('click', function() {
+      const monto = limpiarNumero(montoInput.value);
+
+      if (!monto) {
+        alert('Falta rellenar el campo: ¿Cuánto necesitas?');
+        return;
+      }
+      if (!cuotasSeleccionadas) {
+        alert('Falta seleccionar el número de cuotas en la tabla de opciones de pago');
+        return;
+      }
+
+      const n = cuotasSeleccionadas;
+      const frecuencia = metodoPagoSelect.value;
+      const frecuenciaTexto = frecuencia === 'semanal' ? 'Semanal' : 'Quincenal';
+      const valorCuota = valorCuotaPara(monto, n, frecuencia);
+
+      const mensaje = 'Hola, quiero solicitar un crédito PrestaYa.' +
+        '\nMonto solicitado: ' + formatoPesos(monto) +
+        '\nNúmero de cuotas: ' + n +
+        '\nValor por cuota: ' + formatoPesos(valorCuota) +
+        '\nFrecuencia de pago: ' + frecuenciaTexto;
+
+      const numeroWhatsApp = '573162685282';
+      const url = 'https://wa.me/' + numeroWhatsApp + '?text=' + encodeURIComponent(mensaje);
+      window.open(url, '_blank');
+
+      alert('Solicitud enviada');
+    });
+
+    calcular();
+  </script>
+</body>
+</html>
