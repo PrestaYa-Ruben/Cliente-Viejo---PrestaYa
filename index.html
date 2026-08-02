@@ -568,11 +568,11 @@
       const frecuenciaTexto = frecuencia === 'semanal' ? 'Semanal' : 'Quincenal';
       const valorCuota = valorCuotaPara(monto, n, frecuencia);
 
-      const mensaje = 'Hola, quiero solicitar un crédito PrestaYa.' +
-        '\nMonto solicitado: ' + formatoPesos(monto) +
-        '\nNúmero de cuotas: ' + n +
-        '\nValor por cuota: ' + formatoPesos(valorCuota) +
-        '\nFrecuencia de pago: ' + frecuenciaTexto;
+      const mensaje = '👋 ¡Hola! Quiero solicitar un crédito con PrestaYa.' +
+        '\n\n💰 Monto solicitado: ' + formatoPesos(monto) +
+        '\n\n🔢 Número de cuotas: ' + n +
+        '\n\n💵 Valor por cuota: ' + formatoPesos(valorCuota) +
+        '\n\n📅 Frecuencia de pago: ' + frecuenciaTexto;
 
       const numeroWhatsApp = '573162685282';
       const url = 'https://wa.me/' + numeroWhatsApp + '?text=' + encodeURIComponent(mensaje);
